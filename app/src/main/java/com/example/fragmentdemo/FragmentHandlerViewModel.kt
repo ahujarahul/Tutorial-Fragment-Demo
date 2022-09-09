@@ -4,14 +4,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class FragmentHandlerViewModel: ViewModel() {
-    private val _sharedDataItem = MutableLiveData<String>()
-    var shareDataItem = _sharedDataItem
+    private val _dataForSecondFragment = MutableLiveData<String>()
+    var dataForSecondFragment = _dataForSecondFragment
 
-    fun setSharedDataItem(shareDataItem: String) {
-        _sharedDataItem.value = shareDataItem
+    private val _dataForFirstFragment = MutableLiveData<String>()
+    var dataForFirstFragment = _dataForFirstFragment
+
+    fun setDataForFirstFragment(data: String) {
+        _dataForFirstFragment.value = data
     }
 
-    fun getSharedDataItem(): MutableLiveData<String> {
-        return shareDataItem
+    fun setDataForSecondFragment(data: String) {
+        _dataForSecondFragment.value = data
     }
 }

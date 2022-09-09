@@ -19,7 +19,7 @@ import com.example.fragmentdemo.databinding.FragmentSecondBinding
 class SecondFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
-    private var sharedDataItem: String? = null
+    private var receivedData: String? = null
     // access the host activity's ViewModel
     private val viewModel by activityViewModels<FragmentHandlerViewModel>()
 
@@ -47,9 +47,9 @@ class SecondFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(LOG_TAG, "inside onViewCreated()")
 
-        viewModel.getSharedDataItem().observe(viewLifecycleOwner) {
+        viewModel.dataForSecondFragment.observe(viewLifecycleOwner) {
             // value used in onResume()
-            sharedDataItem = it
+            receivedData = it
         }
     }
 
@@ -73,8 +73,8 @@ class SecondFragment : Fragment() {
         super.onResume()
         Log.d(LOG_TAG, "inside onResume()")
 
-        Toast.makeText(context, "Params from First Fragment :: $param1, $param2. \nShared data :: $sharedDataItem", Toast.LENGTH_LONG).show()
-        Log.d(LOG_TAG, "Params from First Fragment :: $param1, $param2. Shared data :: $sharedDataItem")
+        Toast.makeText(context, "Params from First Fragment :: $param1, $param2. \nShared data :: $receivedData", Toast.LENGTH_LONG).show()
+        Log.d(LOG_TAG, "Params from First Fragment :: $param1, $param2. Shared data :: $receivedData")
     }
 
     override fun onPause() {
@@ -86,7 +86,7 @@ class SecondFragment : Fragment() {
         super.onStop()
         Log.d(LOG_TAG, "inside onStop()")
 
-        viewModel.setSharedDataItem("shared data updated from Second Fragment..")
+        viewModel.setDataForFirstFragment("data from Second Fragment..")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -107,7 +107,6 @@ class SecondFragment : Fragment() {
 
     companion object {
         val LOG_TAG = SecondFragment::class.java.simpleName
-        const val EXTRA_BUNDLE = "extra_bundle"
         const val ARG_PARAM1 = "param1"
         const val ARG_PARAM2 = "param2"
 
