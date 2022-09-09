@@ -47,9 +47,13 @@ class SecondFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(LOG_TAG, "inside onViewCreated()")
 
-        viewModel.getSharedDataItem().observe(viewLifecycleOwner) {
+        viewModel.shareDataItem.observe(viewLifecycleOwner) {
             // value used in onResume()
             sharedDataItem = it
+        }
+
+        viewModel.secondFragmentPreviousButtonClicked.observe(viewLifecycleOwner) {
+            popFromBackStack()
         }
     }
 
@@ -63,9 +67,9 @@ class SecondFragment : Fragment() {
         // any initialization will go here
         Log.d(LOG_TAG, "inside onStart()")
 
-        // will work only if the fragment is added to backstack during transaction
+        // popBackStack will work only if the fragment is added to backstack during transaction
         fragmentSecondBinding?.btnPreviousFragment?.setOnClickListener {
-            activity?.supportFragmentManager?.popBackStack()
+            viewModel.onPreviousButtonClicked()
         }
     }
 
@@ -118,5 +122,10 @@ class SecondFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    private fun popFromBackStack() {
+        // this should be the responsibility of activity or define a NavGraph and should not be done here.
+        activity?.supportFragmentManager?.popBackStack()
     }
 }

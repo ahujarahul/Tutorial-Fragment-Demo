@@ -55,11 +55,15 @@ class FirstFragment : Fragment(), View.OnClickListener {
         Log.d(LOG_TAG, "inside onViewCreated()")
 
         // observing the shared data in ViewModel
-        viewModel.getSharedDataItem().observe(viewLifecycleOwner) { sharedData ->
+        viewModel.shareDataItem.observe(viewLifecycleOwner) { sharedData ->
             // value used in onResume()
             if (!sharedData.isNullOrBlank()) {
                 Toast.makeText(context, "Shared data :: $sharedData", Toast.LENGTH_LONG).show()
             }
+        }
+
+        viewModel.firstFragmentNextButtonClicked.observe(viewLifecycleOwner) {  buttonClicked ->
+            if (buttonClicked.isClicked) replaceFragment()
         }
     }
 
@@ -117,7 +121,7 @@ class FirstFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         when(view?.id) {
-            R.id.btnNextFragment -> replaceFragment()
+            R.id.btnNextFragment -> viewModel.onNextButtonClicked()
         }
     }
 
@@ -145,7 +149,9 @@ class FirstFragment : Fragment(), View.OnClickListener {
         // replace fragment using an interface via host activity
         fragmentHandler?.openSecondFragment("data-1", "data-2")
 
-        // method 4- avoid passing any params to constructor and use a shared ViewModel
+        // data sharing between fragments- avoid passing params to the constructor and use a shared ViewModel
         viewModel.setSharedDataItem("This is shared data between fragments..")
+
+        // method 4 - using navGraph
     }
 }
